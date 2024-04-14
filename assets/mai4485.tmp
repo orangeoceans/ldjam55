@@ -1,0 +1,118 @@
+[gd_scene load_steps=7 format=3 uid="uid://corl3q84wq0xw"]
+
+[ext_resource type="Script" path="res://assets/scripts/rhythm_controller.gd" id="1_s43m5"]
+[ext_resource type="Texture2D" uid="uid://c7ex0vulaybsf" path="res://assets/sprites/pixel.png" id="2_6agf2"]
+[ext_resource type="Script" path="res://assets/scripts/beat_dot_controller.gd" id="3_hhfrh"]
+[ext_resource type="Script" path="res://assets/scripts/arrow_controller.gd" id="4_4bwms"]
+
+[sub_resource type="Animation" id="Animation_u07gg"]
+resource_name = "slide"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GameUI/SliderBar:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(100, 500), Vector2(1050, 500)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_itimk"]
+_data = {
+"slide": SubResource("Animation_u07gg")
+}
+
+[node name="BaseNode" type="Node2D"]
+script = ExtResource("1_s43m5")
+
+[node name="GameUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="SliderBar" type="ColorRect" parent="GameUI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 26.375
+anchor_top = 12.5
+anchor_right = 26.375
+anchor_bottom = 12.5
+offset_left = -955.0
+offset_right = -947.0
+offset_bottom = 80.0
+metadata/_edit_use_anchors_ = true
+
+[node name="SliderBarPlayer" type="AnimationPlayer" parent="GameUI/SliderBar"]
+root_node = NodePath("../../..")
+libraries = {
+"": SubResource("AnimationLibrary_itimk")
+}
+
+[node name="BeatDots" type="Control" parent="GameUI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Dot1" type="TextureRect" parent="GameUI/BeatDots"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 530.0
+offset_right = 120.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+
+[node name="Dot2" type="TextureRect" parent="GameUI/BeatDots"]
+layout_mode = 0
+offset_left = 334.5
+offset_top = 530.0
+offset_right = 354.5
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 1
+
+[node name="Dot3" type="TextureRect" parent="GameUI/BeatDots"]
+layout_mode = 0
+offset_left = 569.0
+offset_top = 530.0
+offset_right = 589.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 2
+
+[node name="Dot4" type="TextureRect" parent="GameUI/BeatDots"]
+layout_mode = 0
+offset_left = 803.5
+offset_top = 530.0
+offset_right = 823.5
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 3
+
+[node name="PlacedArrows" type="Control" parent="GameUI" node_paths=PackedStringArray("slider_bar")]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_4bwms")
+slider_bar = NodePath("../SliderBar")
+
+[node name="GameBeat" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[connection signal="pressed_key" from="." to="GameUI/PlacedArrows" method="_on_base_node_pressed_key"]
+[connection signal="reset_sequence_signal" from="." to="GameUI/PlacedArrows" method="_on_base_node_reset_sequence_signal"]
+[connection signal="timeout" from="GameBeat" to="." method="_on_game_beat_timeout"]

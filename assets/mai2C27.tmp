@@ -1,0 +1,137 @@
+[gd_scene load_steps=9 format=3 uid="uid://corl3q84wq0xw"]
+
+[ext_resource type="Script" path="res://assets/scripts/rhythm_controller.gd" id="1_s43m5"]
+[ext_resource type="Texture2D" uid="uid://c7ex0vulaybsf" path="res://assets/sprites/pixel.png" id="2_6agf2"]
+[ext_resource type="Script" path="res://assets/scripts/beat_dot_controller.gd" id="3_hhfrh"]
+[ext_resource type="Script" path="res://assets/scripts/arrow_controller.gd" id="4_4bwms"]
+[ext_resource type="Script" path="res://assets/scripts/game_controller.gd" id="5_l1ebf"]
+
+[sub_resource type="Animation" id="Animation_u07gg"]
+resource_name = "slide"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GameUI/BeatSlider/SliderBar:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(100, 500), Vector2(800, 500)]
+}
+
+[sub_resource type="Animation" id="Animation_dovyd"]
+resource_name = "slide2"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_itimk"]
+_data = {
+"slide": SubResource("Animation_u07gg"),
+"slide2": SubResource("Animation_dovyd")
+}
+
+[node name="BaseNode" type="Node2D"]
+script = ExtResource("1_s43m5")
+
+[node name="GameUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="BeatSlider" type="Control" parent="GameUI"]
+anchors_preset = 0
+offset_top = 280.0
+offset_right = 40.0
+offset_bottom = 320.0
+
+[node name="SliderBar" type="ColorRect" parent="GameUI/BeatSlider"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 26.375
+anchor_top = 12.5
+anchor_right = 26.375
+anchor_bottom = 12.5
+offset_left = -255.0
+offset_right = -247.0
+offset_bottom = 80.0
+pivot_offset = Vector2(4, 40)
+metadata/_edit_use_anchors_ = true
+
+[node name="SliderBarPlayer" type="AnimationPlayer" parent="GameUI/BeatSlider/SliderBar"]
+root_node = NodePath("../../../..")
+libraries = {
+"": SubResource("AnimationLibrary_itimk")
+}
+
+[node name="BeatDots" type="Control" parent="GameUI/BeatSlider"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Dot1" type="TextureRect" parent="GameUI/BeatSlider/BeatDots"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 530.0
+offset_right = 120.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+
+[node name="Dot2" type="TextureRect" parent="GameUI/BeatSlider/BeatDots"]
+layout_mode = 0
+offset_left = 275.0
+offset_top = 530.0
+offset_right = 295.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 1
+
+[node name="Dot3" type="TextureRect" parent="GameUI/BeatSlider/BeatDots"]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 530.0
+offset_right = 470.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 2
+
+[node name="Dot4" type="TextureRect" parent="GameUI/BeatSlider/BeatDots"]
+layout_mode = 0
+offset_left = 625.0
+offset_top = 530.0
+offset_right = 645.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 3
+
+[node name="PlacedArrows" type="Control" parent="GameUI/BeatSlider" node_paths=PackedStringArray("slider_bar", "dot")]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_4bwms")
+slider_bar = NodePath("../SliderBar")
+dot = NodePath("../BeatDots/Dot1")
+
+[node name="GameBeat" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="GameStage" type="Node2D" parent="."]
+script = ExtResource("5_l1ebf")
+
+[node name="BaddieSpawnTimer" type="Timer" parent="GameStage"]
+
+[connection signal="completed_sequence" from="." to="GameStage" method="_on_base_node_completed_sequence"]
+[connection signal="pressed_key" from="." to="GameUI/BeatSlider/PlacedArrows" method="_on_base_node_pressed_key"]
+[connection signal="reset_sequence_signal" from="." to="GameUI/BeatSlider/PlacedArrows" method="_on_base_node_reset_sequence_signal"]
+[connection signal="timeout" from="GameBeat" to="." method="_on_game_beat_timeout"]
+[connection signal="timeout" from="GameStage/BaddieSpawnTimer" to="GameStage" method="_on_baddie_spawn_timer_timeout"]

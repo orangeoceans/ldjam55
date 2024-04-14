@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgtajaoykycd"]
+
+[ext_resource type="Texture2D" uid="uid://bhbuj34224at5" path="res://assets/sprites/arrow.png" id="1_t84sx"]
+
+[node name="TextureRect" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+rotation = 1.5708
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("1_t84sx")
