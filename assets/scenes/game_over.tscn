@@ -1,0 +1,98 @@
+[gd_scene load_steps=9 format=3 uid="uid://dhsqigpemecvl"]
+
+[ext_resource type="Script" path="res://assets/scenes/game_over.gd" id="1_bsc0j"]
+[ext_resource type="Texture2D" uid="uid://c5hpt0i5r6iyv" path="res://assets/sprites/bg.png" id="1_rk3uj"]
+[ext_resource type="Texture2D" uid="uid://bdoqdlu64smwi" path="res://assets/sprites/player_big.png" id="2_6cbth"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2l28c"]
+atlas = ExtResource("1_rk3uj")
+region = Rect2(0, 0, 900, 900)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ppwxy"]
+atlas = ExtResource("1_rk3uj")
+region = Rect2(900, 0, 900, 900)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sx0ey"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2l28c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ppwxy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 16.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb8tf"]
+atlas = ExtResource("2_6cbth")
+region = Rect2(1412, 0, 353, 416)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_emnf3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bb8tf")
+}],
+"loop": true,
+"name": &"down",
+"speed": 5.0
+}]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_bsc0j")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Floor" type="AnimatedSprite2D" parent="Control"]
+position = Vector2(450, 450)
+sprite_frames = SubResource("SpriteFrames_sx0ey")
+autoplay = "default"
+
+[node name="GameOverlabel" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 218.0
+offset_top = 203.0
+offset_right = 689.0
+offset_bottom = 415.0
+theme_override_font_sizes/normal_font_size = 80
+bbcode_enabled = true
+text = "[wave]GAME OVER[/wave]"
+
+[node name="BaddiesSlainCount" type="RichTextLabel" parent="Control"]
+offset_left = 277.0
+offset_top = 603.0
+offset_right = 597.0
+offset_bottom = 681.0
+theme_override_font_sizes/normal_font_size = 46
+text = "Baddies Slain:"
+
+[node name="BaddiesSlain" type="RichTextLabel" parent="Control"]
+offset_left = 604.0
+offset_top = 603.0
+offset_right = 713.0
+offset_bottom = 683.0
+theme_override_font_sizes/normal_font_size = 46
+text = "0"
+
+[node name="PlayerBig" type="AnimatedSprite2D" parent="Control"]
+position = Vector2(463, 450)
+scale = Vector2(0.548631, 0.548631)
+sprite_frames = SubResource("SpriteFrames_emnf3")
+animation = &"down"
+
+[node name="PlayAgainButton" type="Button" parent="Control"]
+offset_left = 341.0
+offset_top = 686.0
+offset_right = 581.0
+offset_bottom = 766.0
+theme_override_font_sizes/font_size = 36
+text = "Play Again!"
+
+[connection signal="pressed" from="Control/PlayAgainButton" to="." method="_on_play_again_button_pressed"]

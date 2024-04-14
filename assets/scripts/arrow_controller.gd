@@ -5,6 +5,13 @@ extends Control
 
 var SLIDER_BAR_STARTING_X: float = 100.0
 
+var arrow_modulate_base = [
+	Color(1, 0, 0, 0.4),
+	Color(0, 1, 0, 0.4),
+	Color(0, 0, 1, 0.4),
+	Color(1, 0.86, 0, 0.4)
+]
+
 var arrow_scenes = [
 	preload("res://assets/scenes/arrow_up.tscn"),
 	preload("res://assets/scenes/arrow_down.tscn"),
@@ -36,7 +43,7 @@ func _process(delta):
 func _on_base_node_pressed_key(input_key, bar_progress, is_hit):
 	place_arrow(input_key, bar_progress, is_hit)
 
-func _on_base_node_reset_sequence_signal():
+func _on_base_node_reset_sequence_signal(_should_play_this_bar):
 	for arrow in arrows_thus_far:
 		arrow.queue_free()
 	arrows_thus_far = []

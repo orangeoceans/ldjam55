@@ -1,13 +1,14 @@
 extends Node2D
 
 signal pressed_key(input_key)
-signal reset_sequence_signal()
+signal reset_sequence_signal(should_play_this_bar)
+signal register_sequence_hit(still_valid_list, num_hits_thus_far)
 signal completed_sequence(command_key)
 
 @export var SLIDER_BAR_PLAYER_MAX_POS: float = 2.0
 @export var SLIDER_BAR_DOTS_NUMBER: int = 4
-@export var BEAT_SPEED_MULT: float = 0.8
-@export var BEAT_HIT_WINDOW: float = 0.03
+@export var BEAT_SPEED_MULT: float = 1
+@export var BEAT_HIT_WINDOW: float = 0.05
 
 @onready
 var game_beat: Timer = $GameBeat
@@ -15,19 +16,35 @@ var game_beat: Timer = $GameBeat
 var slider_bar: Control = $GameUI/BeatSlider/SliderBar
 @onready
 var slider_bar_animation: AnimationPlayer = $GameUI/BeatSlider/SliderBar/SliderBarPlayer
+@onready
+var game_stage: Node2D = $GameStage
+@onready
+var main_loop_player: AudioStreamPlayer2D = $MainLoop
+var player_character: Node2D
 
 var loops_elapsed: int = 0
+var music_len: float = 16.
 @export var bar_progress: float
 
 var sequences = {
-	"UP":   [Vector2(0, 0), Vector2(0.25, 0), Vector2(0.5, 0), Vector2(0.75, 0)],
-	"DOWN": [Vector2(0, 1), Vector2(0.25, 1), Vector2(0.5, 1), Vector2(0.75, 1)],
 	"SPAWN": [Vector2(0, 0), Vector2(0.25, 1), Vector2(0.5, 2), Vector2(0.75, 3)],
+	"FAST":   [Vector2(0, 0), Vector2(0.25, 0), Vector2(0.5, 0), Vector2(0.75, 0)],
+	"POWER": [Vector2(0, 1), Vector2(0.25, 1), Vector2(0.5, 1), Vector2(0.75, 1)],
+	"MANA": [Vector2(0, 2), Vector2(0.25, 3), Vector2(0.5, 2), Vector2(0.75, 3)],
+	"HEAL": [Vector2(0, 0), Vector2(0.25, 1), Vector2(0.5, 0), Vector2(0.75, 1)],
+}
+var sequence_costs = {
+	"SPAWN": 40,
+	"FAST": 0,
+	"POWER": 0,
+	"MANA": 0,
+	"HEAL": 20,
 }
 var sequences_still_valid: = {}
 var sequence_thus_far
 var num_hits_thus_far: int
 var can_reset_sequence: bool
+var did_valid_sequence: bool
 var should_play_this_bar: bool
 
 func reset_sequence():
@@ -36,18 +53,21 @@ func reset_sequence():
 	for key in sequences:
 		sequences_still_valid[key] = true
 	can_reset_sequence = false
-	emit_signal("reset_sequence_signal")
+	
+	emit_signal("reset_sequence_signal", should_play_this_bar)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	game_beat.wait_time /= BEAT_SPEED_MULT
 	slider_bar_animation.speed_scale = BEAT_SPEED_MULT
-	game_beat.start()
-	slider_bar_animation.play("slide")
+	main_loop_player.pitch_scale /= BEAT_SPEED_MULT
 	bar_progress = 0.0
+	should_play_this_bar = true
 	reset_sequence()
 	can_reset_sequence = true
-	should_play_this_bar = true
+	did_valid_sequence = false
+	game_beat.start()
+	slider_bar_animation.play("slide")
 
 func look_up_hit(this_input):
 	var at_least_one_hit_found = false
@@ -62,10 +82,11 @@ func look_up_hit(this_input):
 			if not at_least_one_hit_found:
 				sequence_thus_far.append(sequence[num_hits_thus_far])
 				at_least_one_hit_found = true
+				did_valid_sequence = true
 				emit_signal("pressed_key", this_input, bar_progress, true)
+				emit_signal("register_sequence_hit", sequences_still_valid, num_hits_thus_far)
 			if num_hits_thus_far+1 == len(sequence):
-				emit_signal("completed_sequence", key)
-				print(key)
+				emit_signal("completed_sequence", key, sequence_costs[key])
 				return true
 		else:
 			sequences_still_valid[key] = false
@@ -88,25 +109,26 @@ func handle_input():
 	
 	if this_input != null and should_play_this_bar:
 		var hit_found = look_up_hit(this_input)
-		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	bar_progress = (game_beat.wait_time - game_beat.time_left)/game_beat.wait_time
 	if bar_progress >= 1-BEAT_HIT_WINDOW:
 		if can_reset_sequence:
-			should_play_this_bar = not should_play_this_bar
+			should_play_this_bar = true
+			did_valid_sequence = false
+			reset_sequence()
 			if not should_play_this_bar:
 				slider_bar.visible = false
-			reset_sequence()
 		bar_progress -= 1
 	handle_input()
 
 func _on_game_beat_timeout():
 	slider_bar_animation.stop()
+	var music_progress = 100.*main_loop_player.get_playback_position()/music_len
+	if music_progress + 5 > 100:
+		main_loop_player.seek(0)
 	if should_play_this_bar:
 		slider_bar_animation.play("slide")
 		slider_bar.visible = true
 	can_reset_sequence = true
-
-

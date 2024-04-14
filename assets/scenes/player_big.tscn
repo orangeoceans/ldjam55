@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3 uid="uid://de7amtlmt31ah"]
+
+[ext_resource type="Texture2D" uid="uid://bdoqdlu64smwi" path="res://assets/sprites/player_big.png" id="1_c6w34"]
+[ext_resource type="Script" path="res://assets/scripts/player_sprite_controller.gd" id="2_56d4q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hu5o"]
+atlas = ExtResource("1_c6w34")
+region = Rect2(0, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5j4pc"]
+atlas = ExtResource("1_c6w34")
+region = Rect2(353, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb8tf"]
+atlas = ExtResource("1_c6w34")
+region = Rect2(1412, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtxw8"]
+atlas = ExtResource("1_c6w34")
+region = Rect2(706, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0atfu"]
+atlas = ExtResource("1_c6w34")
+region = Rect2(706, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0g7yo"]
+atlas = ExtResource("1_c6w34")
+region = Rect2(1059, 0, 353, 416)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8o207"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hu5o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5j4pc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bb8tf")
+}],
+"loop": true,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dtxw8")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0atfu")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0g7yo")
+}],
+"loop": true,
+"name": &"up",
+"speed": 5.0
+}]
+
+[node name="PlayerBig" type="AnimatedSprite2D"]
+scale = Vector2(0.661, 0.661)
+sprite_frames = SubResource("SpriteFrames_8o207")
+autoplay = "default"
+flip_h = true
+script = ExtResource("2_56d4q")

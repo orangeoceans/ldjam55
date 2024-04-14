@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://ccdo4eqbgw1va"]
+
+[ext_resource type="Texture2D" uid="uid://yvkxubs3i2lk" path="res://assets/sprites/baddie_1.png" id="1_5pdmc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c12gj"]
+atlas = ExtResource("1_5pdmc")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfyke"]
+atlas = ExtResource("1_5pdmc")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tq4ab"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c12gj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hfyke")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D"]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_tq4ab")
+autoplay = "default"

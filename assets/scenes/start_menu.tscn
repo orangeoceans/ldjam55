@@ -1,0 +1,89 @@
+[gd_scene load_steps=6 format=3 uid="uid://bc7vgdicgwtcn"]
+
+[ext_resource type="Texture2D" uid="uid://bdoqdlu64smwi" path="res://assets/sprites/player_big.png" id="2_84bo1"]
+[ext_resource type="Script" path="res://assets/scripts/start_button_script.gd" id="3_6c5fr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ivtuy"]
+atlas = ExtResource("2_84bo1")
+region = Rect2(1059, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qc355"]
+atlas = ExtResource("2_84bo1")
+region = Rect2(1412, 0, 353, 416)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ee66h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ivtuy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qc355")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 899.0
+offset_bottom = 918.0
+color = Color(0.298039, 0.176471, 0.231373, 1)
+
+[node name="TopInfo" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 44.0
+offset_right = 804.0
+offset_bottom = 313.0
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[center][wave]Oh no![/wave] While practicing UNADVISABLE MAGIC in your basement, you've accidentally opened a PORTAL TO AN EVIL DIMENSION or something!
+
+Summon allies and command them with the power of dance.[/center]"
+
+[node name="BottomInfo" type="RichTextLabel" parent="."]
+offset_left = 115.0
+offset_top = 604.0
+offset_right = 807.0
+offset_bottom = 873.0
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[center]Press WASD on the beat to issue commands. 
+Summons will appear at your mouse pointer. Watch your mana![/center]"
+
+[node name="PlayerBig" type="AnimatedSprite2D" parent="."]
+position = Vector2(463, 450)
+scale = Vector2(0.548631, 0.548631)
+sprite_frames = SubResource("SpriteFrames_ee66h")
+autoplay = "default"
+
+[node name="PlayAgainButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 341.0
+offset_top = 746.0
+offset_right = 581.0
+offset_bottom = 826.0
+theme_override_font_sizes/font_size = 36
+text = "Start"
+script = ExtResource("3_6c5fr")
+
+[node name="Creds" type="RichTextLabel" parent="."]
+offset_left = 119.0
+offset_top = 844.0
+offset_right = 811.0
+offset_bottom = 1113.0
+theme_override_font_sizes/normal_font_size = 25
+bbcode_enabled = true
+text = "[center]Made in 48 hours by orangeoceans for Ludum Dare 55[/center]"
+
+[connection signal="button_down" from="PlayAgainButton" to="PlayAgainButton" method="_on_button_down"]

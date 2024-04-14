@@ -1,0 +1,318 @@
+[gd_scene load_steps=24 format=3 uid="uid://corl3q84wq0xw"]
+
+[ext_resource type="Script" path="res://assets/scripts/rhythm_controller.gd" id="1_s43m5"]
+[ext_resource type="Texture2D" uid="uid://c7ex0vulaybsf" path="res://assets/sprites/pixel.png" id="2_6agf2"]
+[ext_resource type="Script" path="res://assets/scripts/game_ui_controller.gd" id="2_anjas"]
+[ext_resource type="Texture2D" uid="uid://c5hpt0i5r6iyv" path="res://assets/sprites/bg.png" id="2_v10ib"]
+[ext_resource type="Script" path="res://assets/scripts/beat_dot_controller.gd" id="3_hhfrh"]
+[ext_resource type="Texture2D" uid="uid://bdoqdlu64smwi" path="res://assets/sprites/player_big.png" id="3_lfv5g"]
+[ext_resource type="Script" path="res://assets/scripts/arrow_controller.gd" id="4_4bwms"]
+[ext_resource type="Script" path="res://assets/scripts/player_sprite_controller.gd" id="4_m826g"]
+[ext_resource type="Script" path="res://assets/scripts/game_controller.gd" id="5_l1ebf"]
+[ext_resource type="AudioStream" uid="uid://cao0h4vchvraj" path="res://assets/audio/main_loop.mp3" id="7_go5yi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2l28c"]
+atlas = ExtResource("2_v10ib")
+region = Rect2(0, 0, 900, 900)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ppwxy"]
+atlas = ExtResource("2_v10ib")
+region = Rect2(900, 0, 900, 900)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hyyx7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2l28c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ppwxy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hu5o"]
+atlas = ExtResource("3_lfv5g")
+region = Rect2(0, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5j4pc"]
+atlas = ExtResource("3_lfv5g")
+region = Rect2(353, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb8tf"]
+atlas = ExtResource("3_lfv5g")
+region = Rect2(1412, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtxw8"]
+atlas = ExtResource("3_lfv5g")
+region = Rect2(706, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0atfu"]
+atlas = ExtResource("3_lfv5g")
+region = Rect2(706, 0, 353, 416)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0g7yo"]
+atlas = ExtResource("3_lfv5g")
+region = Rect2(1059, 0, 353, 416)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8o207"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hu5o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5j4pc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bb8tf")
+}],
+"loop": true,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dtxw8")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0atfu")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0g7yo")
+}],
+"loop": true,
+"name": &"up",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_u07gg"]
+resource_name = "slide"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GameUI/BeatSlider/SliderBar:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(100, 500), Vector2(800, 500)]
+}
+
+[sub_resource type="Animation" id="Animation_dovyd"]
+resource_name = "slide2"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_itimk"]
+_data = {
+"slide": SubResource("Animation_u07gg"),
+"slide2": SubResource("Animation_dovyd")
+}
+
+[node name="BaseNode" type="Node2D"]
+script = ExtResource("1_s43m5")
+
+[node name="Floor" type="AnimatedSprite2D" parent="."]
+position = Vector2(450, 450)
+sprite_frames = SubResource("SpriteFrames_hyyx7")
+autoplay = "default"
+
+[node name="GameUI" type="Control" parent="." node_paths=PackedStringArray("game_stage")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_anjas")
+game_stage = NodePath("../GameStage")
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayerBig" type="AnimatedSprite2D" parent="GameUI"]
+position = Vector2(112, 732)
+scale = Vector2(0.661, 0.661)
+sprite_frames = SubResource("SpriteFrames_8o207")
+autoplay = "default"
+flip_h = true
+script = ExtResource("4_m826g")
+
+[node name="BeatSlider" type="Control" parent="GameUI"]
+anchors_preset = 0
+offset_top = 280.0
+offset_right = 40.0
+offset_bottom = 320.0
+
+[node name="SliderBar" type="ColorRect" parent="GameUI/BeatSlider"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 26.375
+anchor_top = 12.5
+anchor_right = 26.375
+anchor_bottom = 12.5
+offset_left = -955.0
+offset_right = -947.0
+offset_bottom = 80.0
+pivot_offset = Vector2(4, 40)
+metadata/_edit_use_anchors_ = true
+
+[node name="SliderBarPlayer" type="AnimationPlayer" parent="GameUI/BeatSlider/SliderBar"]
+root_node = NodePath("../../../..")
+libraries = {
+"": SubResource("AnimationLibrary_itimk")
+}
+
+[node name="BeatDots" type="Control" parent="GameUI/BeatSlider"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Dot1" type="TextureRect" parent="GameUI/BeatSlider/BeatDots"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 530.0
+offset_right = 120.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+
+[node name="Dot2" type="TextureRect" parent="GameUI/BeatSlider/BeatDots"]
+layout_mode = 0
+offset_left = 275.0
+offset_top = 530.0
+offset_right = 295.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 1
+
+[node name="Dot3" type="TextureRect" parent="GameUI/BeatSlider/BeatDots"]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 530.0
+offset_right = 470.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 2
+
+[node name="Dot4" type="TextureRect" parent="GameUI/BeatSlider/BeatDots"]
+layout_mode = 0
+offset_left = 625.0
+offset_top = 530.0
+offset_right = 645.0
+offset_bottom = 550.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("2_6agf2")
+script = ExtResource("3_hhfrh")
+DOT_INDEX = 3
+
+[node name="PlacedArrows" type="Control" parent="GameUI/BeatSlider" node_paths=PackedStringArray("slider_bar", "dot")]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_4bwms")
+slider_bar = NodePath("../SliderBar")
+dot = NodePath("../BeatDots/Dot1")
+
+[node name="SequencesList" type="Control" parent="GameUI"]
+layout_mode = 1
+anchor_top = 1.825
+anchor_bottom = 1.825
+offset_left = 682.0
+offset_top = 13.0
+offset_right = 722.0
+offset_bottom = 53.0
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayerStats" type="Control" parent="GameUI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="HPBar" type="ColorRect" parent="GameUI/PlayerStats"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.6
+anchor_bottom = -0.6
+offset_left = 77.0
+offset_top = 52.0
+offset_right = 850.0
+offset_bottom = 67.0
+metadata/_edit_use_anchors_ = true
+
+[node name="HPLabel" type="RichTextLabel" parent="GameUI/PlayerStats"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.6
+anchor_bottom = -0.6
+offset_left = 44.0
+offset_top = 47.0
+offset_right = 122.0
+offset_bottom = 78.0
+text = "HP"
+metadata/_edit_use_anchors_ = true
+
+[node name="MPBar" type="ColorRect" parent="GameUI/PlayerStats"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.6
+anchor_bottom = -0.6
+offset_left = 77.0
+offset_top = 76.0
+offset_right = 850.0
+offset_bottom = 91.0
+metadata/_edit_use_anchors_ = true
+
+[node name="MPLabel" type="RichTextLabel" parent="GameUI/PlayerStats"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.6
+anchor_bottom = -0.6
+offset_left = 44.0
+offset_top = 72.0
+offset_right = 122.0
+offset_bottom = 103.0
+text = "MP"
+metadata/_edit_use_anchors_ = true
+
+[node name="GameBeat" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="GameStage" type="Node2D" parent="."]
+script = ExtResource("5_l1ebf")
+
+[node name="BaddieSpawnTimer" type="Timer" parent="GameStage"]
+
+[node name="MainLoop" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_go5yi")
+autoplay = true
+
+[connection signal="completed_sequence" from="." to="GameStage" method="_on_base_node_completed_sequence"]
+[connection signal="pressed_key" from="." to="GameUI/BeatSlider/PlacedArrows" method="_on_base_node_pressed_key"]
+[connection signal="register_sequence_hit" from="." to="GameUI" method="_on_base_node_register_sequence_hit"]
+[connection signal="reset_sequence_signal" from="." to="GameUI" method="_on_base_node_reset_sequence_signal"]
+[connection signal="reset_sequence_signal" from="." to="GameUI/BeatSlider/PlacedArrows" method="_on_base_node_reset_sequence_signal"]
+[connection signal="reset_sequence_signal" from="." to="GameStage" method="_on_base_node_reset_sequence_signal"]
+[connection signal="timeout" from="GameBeat" to="." method="_on_game_beat_timeout"]
+[connection signal="timeout" from="GameStage/BaddieSpawnTimer" to="GameStage" method="_on_baddie_spawn_timer_timeout"]

@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://cn6hork2nyv2k"]
+
+[ext_resource type="Texture2D" uid="uid://h0pbl1sclprc" path="res://assets/sprites/goodie_1.png" id="1_x1m10"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_inxvk"]
+atlas = ExtResource("1_x1m10")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wr5vn"]
+atlas = ExtResource("1_x1m10")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tq4ab"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_inxvk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wr5vn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D"]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_tq4ab")
+autoplay = "default"

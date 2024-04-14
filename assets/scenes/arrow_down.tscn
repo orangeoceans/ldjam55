@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bhbuj34224at5" path="res://assets/sprites/arrow.png" id="1_5qhdn"]
 
 [node name="TextureRect" type="TextureRect"]
+modulate = Color(0, 1, 0, 1)
 offset_right = 40.0
 offset_bottom = 40.0
 rotation = 1573.94
