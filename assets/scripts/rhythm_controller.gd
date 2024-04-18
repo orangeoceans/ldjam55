@@ -8,7 +8,7 @@ signal completed_sequence(command_key)
 @export var SLIDER_BAR_PLAYER_MAX_POS: float = 2.0
 @export var SLIDER_BAR_DOTS_NUMBER: int = 4
 @export var BEAT_SPEED_MULT: float = 1
-@export var BEAT_HIT_WINDOW: float = 0.05
+@export var BEAT_HIT_WINDOW: float = 0.08
 
 @onready
 var game_beat: Timer = $GameBeat

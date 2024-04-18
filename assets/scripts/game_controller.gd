@@ -22,13 +22,14 @@ var ENEMY_SPAWN_CIRCLE_RADIUS = 400
 
 var all_goodies
 var all_baddies
-var window_size: Vector2
 
 var goodies_speed_mult: float = 1.
 var goodies_power_mult: float = 1.
 
 var player_character
 var baddies_killed: int = 0
+
+var window_size = Vector2(900, 900)
 
 func get_random_circle_point():
 	var center = window_size/2.
@@ -45,7 +46,6 @@ func _ready():
 	player_mana = player_max_mana
 	all_goodies = []
 	all_baddies = []
-	window_size = get_viewport().size
 	player_character = spawn_character("PLAYER")
 	player_character.position = Vector2(window_size.x/2.+10, window_size.y/2.-30)
 	baddie_timer.wait_time = baddie_spawn_seconds
@@ -69,7 +69,7 @@ func _process(delta):
 			alive_baddies.append(all_baddies[baddie_idx])
 	all_baddies = alive_baddies
 	
-	if player_character.current_health <=99:
+	if player_character.current_health <= 0:
 		emit_signal("player_killed", baddies_killed)
 		baddie_timer.stop()
 

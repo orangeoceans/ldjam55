@@ -52,6 +52,7 @@ text = "[center][wave]Oh no![/wave] While practicing UNADVISABLE MAGIC in your b
 Summon allies and command them with the power of dance.[/center]"
 
 [node name="BottomInfo" type="RichTextLabel" parent="."]
+layout_mode = 0
 offset_left = 115.0
 offset_top = 604.0
 offset_right = 807.0
@@ -78,6 +79,7 @@ text = "Start"
 script = ExtResource("3_6c5fr")
 
 [node name="Creds" type="RichTextLabel" parent="."]
+layout_mode = 0
 offset_left = 119.0
 offset_top = 844.0
 offset_right = 811.0
